@@ -1,9 +1,3 @@
-"""
-DAO pour la table "produit".
-Même logique que FournisseurDAO : on hérite de BaseDAO pour les
-opérations communes, et on ajoute ici tout ce qui est spécifique
-aux produits (recherche, alerte de stock, mise à jour du stock...).
-"""
 
 from dao.base_dao import BaseDAO
 from models.produit import Produit
@@ -89,8 +83,6 @@ class ProduitDAO(BaseDAO):
             curseur.close()
 
     def produits_sous_le_seuil(self, seuil):
-        """Renvoie les produits dont le stock est inférieur au seuil donné
-        (utile pour l'alerte de réapprovisionnement)."""
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute(
@@ -103,7 +95,6 @@ class ProduitDAO(BaseDAO):
             curseur.close()
 
     def est_utilise_dans_une_commande(self, produit_id):
-        """Vérifie si un produit apparaît dans au moins une ligne de commande."""
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute(
@@ -115,16 +106,6 @@ class ProduitDAO(BaseDAO):
             curseur.close()
 
     def ajuster_stock(self, produit_id, variation, connexion=None, curseur=None):
-        """
-        Modifie le stock d'un produit d'une certaine quantité (positive
-        pour réapprovisionner, négative pour retirer suite à une commande).
-
-        On accepte en paramètre une connexion/curseur déjà ouverts, afin
-        de pouvoir appeler cette méthode DEPUIS une transaction plus large
-        (par exemple : créer une commande ET diminuer le stock d'un coup,
-        sans faire de commit intermédiaire). Si rien n'est fourni, on gère
-        notre propre transaction.
-        """
         gere_sa_propre_transaction = connexion is None
         if gere_sa_propre_transaction:
             connexion = self.bd.obtenir_connexion()
@@ -147,7 +128,6 @@ class ProduitDAO(BaseDAO):
                 curseur.close()
 
     def valeur_totale_stock(self):
-        """Calcule la valeur totale du stock : somme(prix_unitaire * stock)."""
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute("SELECT COALESCE(SUM(prix_unitaire * stock), 0) FROM produit")
@@ -156,10 +136,6 @@ class ProduitDAO(BaseDAO):
             curseur.close()
 
     def top_produits_commandes(self, limite=5):
-        """
-        Renvoie les produits les plus commandés (en quantité totale
-        cumulée sur toutes les commandes), du plus commandé au moins commandé.
-        """
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute(

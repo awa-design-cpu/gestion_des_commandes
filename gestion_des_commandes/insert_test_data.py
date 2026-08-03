@@ -1,11 +1,3 @@
-"""
-Ce script remplit la base de données avec quelques données de test
-(fournisseurs, produits, et une commande d'exemple), pour pouvoir
-tester l'application sans tout saisir à la main.
-
-A lancer après create_tables.py :
-    python insert_test_data.py
-"""
 
 from dao.fournisseur_dao import FournisseurDAO
 from dao.produit_dao import ProduitDAO
@@ -58,8 +50,6 @@ def inserer_donnees_de_test():
 
     print("Insertion d'une commande d'exemple...")
     if commande_dao.get_by_id(1) is None:
-        # On recharge les objets produit complets (avec leur stock à jour)
-        # pour construire le panier de la commande.
         produit_a = produit_dao.get_by_id(ids_produits[0])
         produit_b = produit_dao.get_by_id(ids_produits[2])
 

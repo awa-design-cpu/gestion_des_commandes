@@ -1,10 +1,3 @@
-"""
-DAO (Data Access Object) pour la table "fournisseur".
-Toutes les requêtes SQL concernant les fournisseurs passent par ici.
-Les opérations get_all / get_by_id / delete_by_id viennent déjà de
-BaseDAO (héritage), on n'a besoin d'écrire que ce qui est spécifique
-aux fournisseurs.
-"""
 
 from dao.base_dao import BaseDAO
 from models.fournisseur import Fournisseur
@@ -30,7 +23,6 @@ class FournisseurDAO(BaseDAO):
         )
 
     def ajouter(self, fournisseur):
-        """Insère un nouveau fournisseur et renvoie son id généré."""
         connexion = self.bd.obtenir_connexion()
         curseur = connexion.cursor()
         try:
@@ -55,7 +47,6 @@ class FournisseurDAO(BaseDAO):
             curseur.close()
 
     def modifier(self, fournisseur):
-        """Met à jour les informations d'un fournisseur existant."""
         connexion = self.bd.obtenir_connexion()
         curseur = connexion.cursor()
         try:
@@ -78,7 +69,6 @@ class FournisseurDAO(BaseDAO):
             curseur.close()
 
     def rechercher_par_code(self, code):
-        """Cherche un fournisseur par son code exact (ex: F001)."""
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute("SELECT * FROM fournisseur WHERE code = %s", (code,))
@@ -88,11 +78,6 @@ class FournisseurDAO(BaseDAO):
             curseur.close()
 
     def rechercher_par_nom(self, mot_cle):
-        """
-        Cherche les fournisseurs dont la raison sociale contient le mot-clé
-        (recherche partielle). Avec la collation par défaut de MySQL,
-        LIKE ignore déjà la casse, inutile d'utiliser LOWER().
-        """
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute(
@@ -105,11 +90,6 @@ class FournisseurDAO(BaseDAO):
             curseur.close()
 
     def a_des_commandes(self, fournisseur_id):
-        """
-        Vérifie si un fournisseur possède au moins une commande.
-        Utile avant une suppression : un fournisseur avec des commandes
-        ne doit pas pouvoir être supprimé (contrainte du sujet).
-        """
         curseur = self.bd.obtenir_curseur()
         try:
             curseur.execute(

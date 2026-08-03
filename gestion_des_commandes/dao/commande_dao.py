@@ -1,15 +1,3 @@
-"""
-DAO pour les commandes. C'est le DAO le plus complexe du projet car
-une commande n'est jamais seule : elle est toujours liée à un
-fournisseur et à plusieurs lignes de commande (les produits commandés).
-
-Règles métier gérées ici (voir le sujet du projet) :
-- Le montant total d'une commande = somme des sous-totaux de ses lignes.
-- On ne peut pas commander plus que le stock disponible.
-- Le stock est diminué automatiquement à la création de la commande.
-- Le statut ne peut qu'avancer : EN_ATTENTE -> VALIDEE -> LIVREE
-  (jamais reculer), sauf passage à ANNULEE qui remet le stock.
-"""
 
 from dao.base_dao import BaseDAO
 from models.commande import (
@@ -38,21 +26,7 @@ class CommandeDAO(BaseDAO):
         )
 
     def creer_commande(self, commande, panier):
-        """
-        Crée une commande complète en une seule transaction :
-        - insère l'en-tête de la commande
-        - insère chaque ligne de commande (une par produit du panier)
-        - diminue le stock de chaque produit commandé
 
-        `panier` est une liste de tuples (produit, quantite).
-        On vérifie d'abord que le stock est suffisant pour CHAQUE
-        produit avant de commencer, pour ne rien insérer si une seule
-        ligne pose problème.
-
-        Comme toutes les opérations doivent réussir ensemble (ou
-        échouer ensemble), tout est fait dans UNE seule transaction :
-        un seul commit() à la fin, ou un rollback() si un problème survient.
-        """
         # Étape 1 : vérification du stock disponible pour chaque produit.
         for produit, quantite in panier:
             if quantite > produit.stock:
@@ -132,10 +106,6 @@ class CommandeDAO(BaseDAO):
             curseur.close()
 
     def changer_statut(self, commande_id, nouveau_statut):
-        """
-        Fait avancer le statut d'une commande, en respectant la règle :
-        on ne peut jamais reculer (LIVREE -> EN_ATTENTE est interdit).
-        """
         commande = self.get_by_id(commande_id)
         if commande is None:
             print("Commande introuvable.")
