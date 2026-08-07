@@ -7,10 +7,8 @@ class ConnexionBD:
     _instance = None
 
     def __new__(cls):
-        # __new__ est appelée avant __init__, c'est ici qu'on décide
-        # si on crée un nouvel objet ou si on renvoie celui qui existe déjà.
         if cls._instance is None:
-            # Aucune instance n'existe encore : on la crée.
+
             cls._instance = super().__new__(cls)
             cls._instance._connexion = None
         return cls._instance
@@ -43,7 +41,7 @@ if __name__ == "__main__":
     print("Est-ce bien le même objet (Singleton) ?", bd is bd2)
     try:
         connexion = bd.obtenir_connexion()
-        print("Connexion réussie à la base de données !")
+        print("Connexion réussie  !!")
         bd.fermer_connexion()
     except Exception:
-        print("Impossible de se connecter, vérifiez database/config.py")
+        print("Impossible de se connecter,veuillez  vérifiez database/config.py")
