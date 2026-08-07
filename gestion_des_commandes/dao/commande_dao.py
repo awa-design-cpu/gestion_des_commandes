@@ -26,8 +26,6 @@ class CommandeDAO(BaseDAO):
         )
 
     def creer_commande(self, commande, panier):
-
-        # Étape 1 : vérification du stock disponible pour chaque produit.
         for produit, quantite in panier:
             if quantite > produit.stock:
                 print(f"Stock insuffisant pour {produit.designation} "
@@ -76,10 +74,6 @@ class CommandeDAO(BaseDAO):
             curseur.close()
 
     def get_detail_avec_lignes(self, commande_id):
-        """
-        Renvoie une commande avec la liste complète de ses lignes
-        (avec le nom du produit, grâce à une jointure).
-        """
         commande = self.get_by_id(commande_id)
         if commande is None:
             return None
