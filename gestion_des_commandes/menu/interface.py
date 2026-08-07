@@ -1,18 +1,3 @@
-"""
-Ce module contient toute l'interface utilisateur en ligne de commande.
-C'est le seul fichier qui fait des print() et des input() : les DAO
-et les modèles, eux, ne s'occupent jamais de l'affichage. Cette
-séparation permet, par exemple, de remplacer un jour cette interface
-console par une interface graphique sans toucher au reste du code.
-
-Le fichier est organisé comme ceci :
-1. Petites fonctions utilitaires de saisie (demander un entier, un prix...)
-2. Menu et actions "Fournisseurs"
-3. Menu et actions "Produits"
-4. Menu et actions "Commandes"
-5. Menu et actions "Rapports"
-6. Le menu principal, qui regroupe tout
-"""
 
 from dao.fournisseur_dao import FournisseurDAO
 from dao.produit_dao import ProduitDAO
@@ -25,17 +10,8 @@ fournisseur_dao = FournisseurDAO()
 produit_dao = ProduitDAO()
 commande_dao = CommandeDAO()
 
-
-# ---------------------------------------------------------------------------
-# 1. Fonctions utilitaires de saisie
-# ---------------------------------------------------------------------------
-
 def demander_entier(message, minimum=None):
-    """
-    Demande un nombre entier à l'utilisateur et recommence tant que la
-    saisie n'est pas valide. Evite que le programme plante si
-    l'utilisateur tape une lettre au lieu d'un chiffre.
-    """
+
     while True:
         saisie = input(message)
         try:
@@ -63,7 +39,6 @@ def demander_decimal(message, minimum=None):
 
 
 def demander_texte_obligatoire(message):
-    """Demande une chaîne de caractères et refuse qu'elle soit vide."""
     while True:
         saisie = input(message).strip()
         if saisie:
@@ -75,10 +50,6 @@ def pause():
     input("\nAppuyez sur Entrée pour continuer...")
 
 
-# ---------------------------------------------------------------------------
-# 2. Gestion des fournisseurs
-# ---------------------------------------------------------------------------
-
 def menu_fournisseurs():
     while True:
         print("\n--- GESTION DES FOURNISSEURS ---")
@@ -89,7 +60,7 @@ def menu_fournisseurs():
         print("5. Supprimer un fournisseur")
         print("6. Rechercher un fournisseur")
         print("0. Retour au menu principal")
-        choix = input("Votre choix : ")
+        choix = input("Tapez votre choix : ")
 
         if choix == "1":
             ajouter_fournisseur()
@@ -208,11 +179,6 @@ def rechercher_fournisseur():
 
 
 def _trouver_fournisseur(identifiant):
-    """
-    Fonction interne (préfixée par _) utilisée par plusieurs actions
-    ci-dessus : elle accepte soit un ID numérique, soit un code
-    (ex: "F001"), et renvoie le fournisseur correspondant.
-    """
     if identifiant.isdigit():
         fournisseur = fournisseur_dao.get_by_id(int(identifiant))
         if fournisseur:
@@ -235,7 +201,7 @@ def menu_produits():
         print("6. Rechercher un produit par désignation")
         print("7. Alerte de réapprovisionnement (stock sous un seuil)")
         print("0. Retour au menu principal")
-        choix = input("Votre choix : ")
+        choix = input("Tapez votre choix : ")
 
         if choix == "1":
             ajouter_produit()
@@ -382,7 +348,7 @@ def menu_commandes():
         print("5. Annuler une commande")
         print("6. Supprimer une commande")
         print("0. Retour au menu principal")
-        choix = input("Votre choix : ")
+        choix = input("Tapez votre choix : ")
 
         if choix == "1":
             creer_commande()
