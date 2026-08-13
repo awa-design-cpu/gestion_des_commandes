@@ -109,6 +109,10 @@ class CommandeDAO(BaseDAO):
             print("Impossible de modifier une commande annulée.")
             return False
 
+        if nouveau_statut not in ORDRE_STATUTS and nouveau_statut != STATUT_ANNULEE:
+            print("Statut invalide. Veuillez choisir un statut autorisé.")
+            return False
+
         if nouveau_statut in ORDRE_STATUTS and commande.statut in ORDRE_STATUTS:
             rang_actuel = ORDRE_STATUTS.index(commande.statut)
             rang_nouveau = ORDRE_STATUTS.index(nouveau_statut)
