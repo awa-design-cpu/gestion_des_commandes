@@ -42,6 +42,12 @@ class BaseDAO(ABC):
                 f"DELETE FROM {self.nom_table} WHERE id = %s",
                 (id_recherche,)
             )
+
+            if curseur.rowcount == 0:
+                print("Aucun élément trouvé avec cet identifiant.")
+                connexion.rollback()
+                return False
+
             connexion.commit()
             return True
         except Exception as erreur:
