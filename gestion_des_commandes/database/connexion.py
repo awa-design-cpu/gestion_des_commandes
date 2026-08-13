@@ -24,7 +24,7 @@ class ConnexionBD:
                     password=PARAMETRES_BD["password"],
                 )
             except mysql.connector.Error as erreur:
-                print("Erreur de connexion à la base de données :", erreur)
+                print("Echec de connexion à la base de données :", erreur)
                 raise
         return self._connexion
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     print("Est-ce bien le même objet (Singleton) ?", bd is bd2)
     try:
         connexion = bd.obtenir_connexion()
-        print("Connexion réussie  !!")
+        print("Connexion à la base de donnée réussie  !!")
         bd.fermer_connexion()
     except Exception:
-        print("Impossible de se connecter,veuillez  vérifiez database/config.py")
+        print("Impossible de se connecter,veuillez  vérifiez  les paramétres dans database/config.py")
