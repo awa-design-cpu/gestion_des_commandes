@@ -82,6 +82,17 @@ class ProduitDAO(BaseDAO):
         finally:
             curseur.close()
 
+    def produits_en_rupture(self):
+        curseur = self.bd.obtenir_curseur()
+        try:
+            curseur.execute(
+                "SELECT * FROM produit WHERE stock = 0 ORDER BY id"
+            )
+            lignes = curseur.fetchall()
+            return [self.ligne_vers_objet(l) for l in lignes]
+        finally:
+            curseur.close()
+
     def produits_sous_le_seuil(self, seuil):
         curseur = self.bd.obtenir_curseur()
         try:
