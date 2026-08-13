@@ -6,12 +6,11 @@ from models.fournisseur import Fournisseur
 class FournisseurDAO(BaseDAO):
 
     def __init__(self):
-        # On indique à la classe parente le nom de la table à utiliser.
+
         super().__init__("fournisseur")
 
     def ligne_vers_objet(self, ligne):
-        # L'ordre des colonnes correspond à l'ordre défini dans la table SQL :
-        # id, code, raison_sociale, email, telephone, adresse, date_creation
+
         return Fournisseur(
             id=ligne[0],
             code=ligne[1],
@@ -34,8 +33,6 @@ class FournisseurDAO(BaseDAO):
                 (fournisseur.code, fournisseur.raison_sociale, fournisseur.email,
                  fournisseur.telephone, fournisseur.adresse)
             )
-            # Avec MySQL, on récupère l'id auto-généré via lastrowid
-            # (il n'y a pas de clause RETURNING comme sous PostgreSQL).
             nouvel_id = curseur.lastrowid
             connexion.commit()
             return nouvel_id
@@ -59,6 +56,12 @@ class FournisseurDAO(BaseDAO):
                 (fournisseur.raison_sociale, fournisseur.email,
                  fournisseur.telephone, fournisseur.adresse, fournisseur.id)
             )
+
+            if curseur.rowcount == 0:
+                print("Aucun fournisseur trouvé avec cet identifiant.")
+                connexion.rollback()
+                return False
+
             connexion.commit()
             return True
         except Exception as erreur:
